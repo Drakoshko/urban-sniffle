@@ -245,8 +245,7 @@ class Fireball extends Actor {
   }
   handleObstacle() {
     // тут нужно использова метод класса Vector
-    this.speed.x *= -1;
-    this.speed.y *= -1;
+    this.speed = this.speed.times(-1);
   }
   act(time, level) {
     if (level.obstacleAt(this.getNextPosition(time), this.size)) {
