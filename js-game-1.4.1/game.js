@@ -232,7 +232,7 @@ class LevelParser {
 
 class Fireball extends Actor {
   // не опускайте аргументы у Vector
-  constructor(initialPos = new Vector, initialSpeed = new Vector) {
+  constructor(initialPos = new Vector(0, 0), initialSpeed = new Vector(0, 0)) {
     super(initialPos, new Vector(1, 1), initialSpeed);
     // pos, size, speed должны задаваться
     // через вызов родительского конструктора
@@ -257,7 +257,7 @@ class Fireball extends Actor {
 }
 
 class HorizontalFireball extends Fireball {
-  constructor(initialPos = new Vector) {
+  constructor(initialPos = new Vector(0, 0)) {
     super(initialPos, new Vector(2, 0));
     // pos, size, speed должны задаваться
     // через вызов родительского конструктора
@@ -265,7 +265,7 @@ class HorizontalFireball extends Fireball {
 }
 
 class VerticalFireball extends Fireball {
-  constructor(initialPos = new Vector) {
+  constructor(initialPos = new Vector(0, 0)) {
     super(initialPos, new Vector(0, 2));
     // pos, size, speed должны задаваться
     // через вызов родительского конструктора
@@ -273,7 +273,7 @@ class VerticalFireball extends Fireball {
 }
 
 class FireRain extends Fireball {
-  constructor(initialPos = new Vector) {
+  constructor(initialPos = new Vector(0, 0)) {
     super(initialPos, new Vector(0, 3));
     this.source = initialPos;
     // pos, size, speed должны задаваться
@@ -285,7 +285,7 @@ class FireRain extends Fireball {
 }
 
 class Coin extends Actor {
-  constructor(initialPos = new Vector) {
+  constructor(initialPos = new Vector(0, 0)) {
     super(initialPos.plus(new Vector(0.2, 0.1)), new Vector(0.6, 0.6));
     this.source = initialPos.plus(new Vector(0.2, 0.1));
     // pos, size, speed должны задаваться
@@ -318,7 +318,7 @@ class Coin extends Actor {
 }
 
 class Player extends Actor {
-  constructor(initialPos = new Vector) {
+  constructor(initialPos = new Vector(0, 0)) {
     super(initialPos.plus(new Vector(0, -0.5)), new Vector(0.8, 1.5), new Vector());
     // pos, size, speed должны задаваться
     // через вызов родительского конструктора
