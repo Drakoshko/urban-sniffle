@@ -9,6 +9,8 @@ class Vector {
     if (add instanceof Vector) {
       return new Vector(this.x + add.x, this.y + add.y);
     }
+    // лучше сначала проверка аргуменов, потом основной код
+    // нет сообщения что за ошибка
     throw (new Error);
   }
   times(multiplier) {
@@ -17,6 +19,7 @@ class Vector {
 }
 
 class Actor {
+  // не опускайте аргументы у конструктора Vector
   constructor(initialPos = new Vector, initialSize = new Vector(1, 1), initialSpeed = new Vector) {
 
     if (!((initialPos instanceof Vector) && (initialSize instanceof Vector) && (initialSpeed instanceof Vector))) {
@@ -44,11 +47,13 @@ class Actor {
   }
   isIntersect(actor) {
   	if (!(actor instanceof Actor)) {
+  	  // нет сообщения
   		throw (new Error);
   	}
   	if (actor === this) {
   		return false;
   	}
+  	// все скобки можно убрать
   	return ((this.right > actor.left) && (actor.right > this.left) && (this.bottom > actor.top) && (actor.bottom > this.top));
   }
 }
@@ -93,14 +98,19 @@ class Level {
   }
   removeActor(deletingActor) {
     const index = this.actors.indexOf(deletingActor);
+    // это условие никогда не сработает
+    // почему сравнение идёт со строкой?
     if (index !== '-1') {
       this.actors.splice(index, 1);
     }
   }
   noMoreActors(type) {
+    // здесь лучше использовать другой метод массива
+    // который проверяет наличие объекта по условию и возвращает true/false
     return (!(this.actors.find((actor) => (actor.type === type))))
   }
   playerTouched(typeOfObstacle, actor) {
+    // скобки вокруг каждого условия можно не писать
     if ((typeOfObstacle === 'lava') || (typeOfObstacle === 'fireball')) {
       this.status = 'lost';
       return;
@@ -140,13 +150,17 @@ class LevelParser {
   }
 
   createActors(stringMap) {
+    // можно обойтись без этой переменной
     let yCoord = 0;
     const resultArray = [];
+    // вместо for of лучше использовать for или forEach
     for (let string of stringMap) {
       for (let xCoord = 0; xCoord < string.length; xCoord++) {
       	const currentConstructor = this.actorFromSymbol(string[xCoord])
       	if (typeof currentConstructor === 'function') {
+      	  // const
       		let newActor = new currentConstructor(new Vector(xCoord, yCoord))
+          // не опускайте фигурные скобки у if
       		if (newActor instanceof Actor) resultArray.push(newActor)
       	}
       }
