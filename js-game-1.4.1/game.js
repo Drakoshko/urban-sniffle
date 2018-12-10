@@ -140,14 +140,13 @@ class LevelParser {
     }
   }
   createGrid(stringMap) {
-    // тут лучше использовать стрелочную функцию
-    return stringMap.map(function(currentString) {
+    return stringMap.map((currentString) => {
     	const resultString = [];
     	for (let i = 0; i < currentString.length; i++) {
         	resultString.push(this.obstacleFromSymbol(currentString[i]));
       	}
       	return resultString;
-    }, this)
+    })
   }
 
   createActors(stringMap) {
