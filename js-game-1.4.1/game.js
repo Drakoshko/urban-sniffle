@@ -6,10 +6,10 @@ class Vector {
     this.y = y;
   }
   plus(add) {
-    if (add instanceof Vector) {
-      return new Vector(this.x + add.x, this.y + add.y);
+    if (!(add instanceof Vector)) {
+      throw new Error('Нужно суммировать с вектором');
     }
-    throw (new Error);
+    return new Vector(this.x + add.x, this.y + add.y);
   }
   times(multiplier) {
     return new Vector(this.x * multiplier, this.y * multiplier);
@@ -17,10 +17,10 @@ class Vector {
 }
 
 class Actor {
-  constructor(initialPos = new Vector, initialSize = new Vector(1, 1), initialSpeed = new Vector) {
+  constructor(initialPos = new Vector(0, 0), initialSize = new Vector(1, 1), initialSpeed = new Vector(0, 0)) {
 
     if (!((initialPos instanceof Vector) && (initialSize instanceof Vector) && (initialSpeed instanceof Vector))) {
-      throw (new Error);
+      throw (new Error('Параметры должны быть векторами'));
     }
     this.pos = initialPos;
     this.size = initialSize;
@@ -44,12 +44,12 @@ class Actor {
   }
   isIntersect(actor) {
   	if (!(actor instanceof Actor)) {
-  		throw (new Error);
+  		throw (new Error('Параметр должен быть Actor'));
   	}
   	if (actor === this) {
   		return false;
   	}
-  	return ((this.right > actor.left) && (actor.right > this.left) && (this.bottom > actor.top) && (actor.bottom > this.top));
+  	return this.right > actor.left && actor.right > this.left && this.bottom > actor.top && actor.bottom > this.top;
   }
 }
 
@@ -93,15 +93,15 @@ class Level {
   }
   removeActor(deletingActor) {
     const index = this.actors.indexOf(deletingActor);
-    if (index !== '-1') {
+    if (index !== -1) {
       this.actors.splice(index, 1);
     }
   }
   noMoreActors(type) {
-    return (!(this.actors.find((actor) => (actor.type === type))))
+    return (!(this.actors.some((actor) => (actor.type === type))))
   }
   playerTouched(typeOfObstacle, actor) {
-    if ((typeOfObstacle === 'lava') || (typeOfObstacle === 'fireball')) {
+    if (typeOfObstacle === 'lava' || typeOfObstacle === 'fireball') {
       this.status = 'lost';
       return;
     }
@@ -140,17 +140,17 @@ class LevelParser {
   }
 
   createActors(stringMap) {
-    let yCoord = 0;
     const resultArray = [];
-    for (let string of stringMap) {
-      for (let xCoord = 0; xCoord < string.length; xCoord++) {
-      	const currentConstructor = this.actorFromSymbol(string[xCoord])
+    for (let yCoord = 0; yCoord < stringMap.length; yCoord++) {
+      for (let xCoord = 0; xCoord < stringMap[yCoord].length; xCoord++) {
+      	const currentConstructor = this.actorFromSymbol(stringMap[yCoord][xCoord])
       	if (typeof currentConstructor === 'function') {
-      		let newActor = new currentConstructor(new Vector(xCoord, yCoord))
-      		if (newActor instanceof Actor) resultArray.push(newActor)
+      		const newActor = new currentConstructor(new Vector(xCoord, yCoord))
+      		if (newActor instanceof Actor) {
+      			resultArray.push(newActor)
+      		}
       	}
       }
-      yCoord++;
     }
     return resultArray;
   }
@@ -353,4 +353,4 @@ const schemas = [
 
 const parser = new LevelParser(actorDict);
 runGame(schemas, parser, DOMDisplay)
-  .then(() => console.log('Вы выиграли приз!'));
+	.then(() => console.log('Вы выиграли приз!'));
